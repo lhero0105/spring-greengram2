@@ -1,8 +1,7 @@
 package com.green.greengram2_1.user;
 
 import com.green.greengram2_1.ResVo;
-import com.green.greengram2_1.user.model.UserSignupDto;
-import com.green.greengram2_1.user.model.UserSignupProcDto;
+import com.green.greengram2_1.user.model.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.mindrot.jbcrypt.BCrypt;
@@ -13,6 +12,28 @@ import org.springframework.stereotype.Service;
 @Slf4j
 public class UserService {
     private final UserMapper mapper;
+
+    public UserSigninVo userSignin(UserSigninDto dto){
+        UserSigninProcVo procVo = mapper.selUserById(dto.getUid());
+        UserSigninVo vo = new UserSigninVo();
+        if(procVo != null) {
+            String savedPw = procVo.getUpw(); // DB에서 가져온 비번
+            boolean comparedPw = BCrypt.checkpw(dto.getUpw(), savedPw);
+            // 첫번쨰 인자에 암호화 안된 비번 두번쨰 인자엔 DB의 암호화된 비번
+            if(procVo == null){
+                vo.setResult(2);
+                return vo;
+            }else if (comparedPw){
+                vo.setResult(1);
+                vo.setIuser(procVo.getIuser());
+                vo.setNm(procVo.getNm());
+                vo.setPic(procVo.getPic());
+                return vo;
+            }
+        }
+        vo.setResult(3);
+        return vo;
+    }
     ResVo userSignup(UserSignupDto dto){
         String hashedPw = BCrypt.hashpw(dto.getUpw(), BCrypt.gensalt());
         log.info("hashedPw: {}", hashedPw);
