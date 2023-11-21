@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.green.greengram2_1.feed.FeedMapper">
+    <insert id="insFeed" useGeneratedKeys="true" keyProperty="ifeed">
+        INSERT INTO t_feed
+        SET iuser = #{iuser}
+        <if test=" contents != null and contents != '' ">
+            , contents = #{contents}
+        </if>
+        <if test=" location != null and location != '' ">
+            , location = #{location}
+        </if>
+    </insert>
+
+    <insert id="insFeedPic">
+        INSERT INTO t_feed_pics
+        (ifeed, pic)
+        VALUES
+        <foreach collection="pics" item="item" open="(" close=")" separator="),(">
+            #{ifeed}, #{item}
+        </foreach>
+    </insert>
+
+    <select id="selFeedAll">
+        SELECT A.ifeed, A.contents, A.location, B.iuser AS writerIuser
+        , B.nm AS writerNm, A.created_at AS createdAt, B.pic AS writerPic
+        , if(C.ifeed IS NULL, 0, 1) AS isFav
+        FROM t_feed A
+        JOIN t_user B
+        ON A.iuser = B.iuser
+        LEFT JOIN t_feed_fav C
+        ON A.ifeed = C.ifeed AND B.iuser = #{loginedIuser}
+        <if test=" targetIuser > 0 ">
+        WHERE A.iuser = #{targetIuser}
+        </if>
+        ORDER BY A.ifeed DESC
+        LIMIT #{startIdx}, #{rowCount}
+    </select>
+
+
+
+</mapper>
