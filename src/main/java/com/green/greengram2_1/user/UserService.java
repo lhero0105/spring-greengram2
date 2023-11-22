@@ -1,6 +1,8 @@
 package com.green.greengram2_1.user;
 
 import com.green.greengram2_1.ResVo;
+import com.green.greengram2_1.feed.FeedPicsMapper;
+import com.green.greengram2_1.feed.model.FeedFavDto;
 import com.green.greengram2_1.user.model.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -12,6 +14,8 @@ import org.springframework.stereotype.Service;
 @Slf4j
 public class UserService {
     private final UserMapper mapper;
+    private final FeedPicsMapper feedPicsMapper;
+
 
     public UserSigninVo userSignin(UserSigninDto dto){
         UserSigninProcVo procVo = mapper.selUserById(dto.getUid());
@@ -49,5 +53,12 @@ public class UserService {
             return new ResVo(0);
         }
         return new ResVo(pDto.getIuser());
+    }
+    public UserInfoVo getUserInfo(int targetIuser){
+        return mapper.selUserInfo(targetIuser);
+    }
+    public ResVo patchUserProfile(UserPatchPicDto dto){
+        int affective = feedPicsMapper.updFeedpic(dto);
+        return new ResVo(affective);
     }
 }

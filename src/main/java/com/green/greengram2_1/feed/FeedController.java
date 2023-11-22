@@ -1,12 +1,12 @@
 package com.green.greengram2_1.feed;
 
 import com.green.greengram2_1.ResVo;
-import com.green.greengram2_1.feed.model.FeedInsDto;
-import com.green.greengram2_1.feed.model.FeedSelDto;
-import com.green.greengram2_1.feed.model.FeedSelVo;
+import com.green.greengram2_1.feed.model.*;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.Parameters;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -25,10 +25,10 @@ public class FeedController {
 
     @Operation(summary = "피드추가", description = "피드 추가 처리")
     @Parameters(value = {
-              @Parameter(name = "iuser", description = "유저pk")
+              @Parameter(name = "iuser", description = "작성자pk")
             , @Parameter(name = "contents", description = "내용")
             , @Parameter(name = "location", description = "장소")
-            , @Parameter(name = "pics", description = "사진들")
+            , @Parameter(name = "pics", description = "사진")
     })
     @PostMapping
     public ResVo postFeedDto(@RequestBody FeedInsDto dto){
@@ -50,5 +50,24 @@ public class FeedController {
                         .rowCount(ROW_COUNT)
                         .startIdx((page-1) * ROW_COUNT)
                         .build());
+    }
+    // insert : 1, delete : 0
+    @GetMapping("/fav")
+    @Operation(summary = "좋아요 처리", description = "Toggle로 처리함<br>")
+    @Parameters(value = {
+            @Parameter(name = "ifeed", description = "feed pk")
+            , @Parameter(name = "iuser", description = "로그인 한 유저 pk")
+    })
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "좋아요 처리: result(1), 좋아요 취소: result(2)")
+    })
+    public ResVo toggleFeedFav(FeedFavDto dto){
+        log.info("dto : {}",dto);
+        return service.toggleFeedFav(dto);
+    }
+    // 댓글 달리면 1 아니면 2
+    @PostMapping("/comment")
+    public ResVo insFeedComment(@RequestBody FeedCommentInsDto dto){
+        return service.insFeedComment(dto);
     }
 }

@@ -1,19 +1,14 @@
 package com.green.greengram2_1.user;
 
 import com.green.greengram2_1.ResVo;
-import com.green.greengram2_1.user.model.UserSigninDto;
-import com.green.greengram2_1.user.model.UserSigninVo;
-import com.green.greengram2_1.user.model.UserSignupDto;
+import com.green.greengram2_1.user.model.*;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.Parameters;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @Slf4j
 @RestController
@@ -47,4 +42,17 @@ public class UserController {
         log.info("dto: {}", dto);
         return service.userSignup(dto); // ResVo객체에 insert한 레코드 pk값을 담아서 응답처리
     }
+    // 해당 유저 프로필 정보
+    @GetMapping
+    public UserInfoVo getUserInfo(@RequestParam("target_iuser") int targetIuser){
+        log.info("targetIuser: {}",targetIuser);
+        return service.getUserInfo(targetIuser);
+    }
+    // 프사 수정
+    @PatchMapping("/pic")
+    public ResVo patchUserProfile(@RequestBody UserPatchPicDto dto){
+        // 수정 성공 result : 1, 수정 실패 : result : 0
+        return service.patchUserProfile(dto);
+    }
+
 }

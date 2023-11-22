@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.green.greengram2_1.feed.FeedCommentMapper">
+    <insert id="insFeedComment">
+        INSERT INTO t_feed_comment
+        SET ifeed = #{ifeed}
+        , iuser = #{iuser}
+        , comment = #{comment}
+    </insert>
+
+    <select id="selCommentAll">
+        SELECT A.ifeed_comment AS ifeedComment, A.comment, A.created_at AS createdAt
+        , B.iuser AS writerIuser, B.nm AS writerNm, B.pic AS writerPic
+        FROM t_feed_comment A
+        INNER JOIN t_user B
+        ON A.iuser = B.iuser
+        WHERE A.ifeed = #{ifeed}
+        ORDER BY A.ifeed
+        LIMIT #{startIdx}, #{rowCount}
+    </select>
+</mapper>

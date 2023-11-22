@@ -16,4 +16,16 @@
         SELECT iuser, upw, nm, pic  FROM t_user
         WHERE uid = #{uid}
     </select>
+
+    <select id="selUserInfo">
+        SELECT A.nm, A.pic, A.created_at AS createdAt
+        , COUNT(DISTINCT b.ifeed) AS feedCnt
+        , COUNT(c.ifeed) AS favCnt
+        FROM t_user A
+        LEFT JOIN t_feed B
+        ON A.iuser = B.iuser
+        LEFT JOIN t_feed_fav C
+        ON B.ifeed = C.ifeed
+        WHERE A.iuser = #{targetIuser}
+    </select>
 </mapper>

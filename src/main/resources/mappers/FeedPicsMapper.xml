@@ -6,4 +6,18 @@
         SELECT pic FROM t_feed_pics
         WHERE ifeed = #{ifeed}
     </select>
+
+    <insert id="insFeedPic">
+        INSERT INTO t_feed_pics
+        (ifeed, pic)
+        VALUES
+        <foreach collection="pics" item="item" open="(" close=")" separator="),(">
+            #{ifeed}, #{item}
+        </foreach>
+    </insert>
+    <update id="updFeedpic">
+        UPDATE t_user
+        SET pic = #{pic}
+        WHERE iuser = #{iuser}
+    </update>
 </mapper>

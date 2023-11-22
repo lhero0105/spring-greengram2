@@ -13,15 +13,6 @@
         </if>
     </insert>
 
-    <insert id="insFeedPic">
-        INSERT INTO t_feed_pics
-        (ifeed, pic)
-        VALUES
-        <foreach collection="pics" item="item" open="(" close=")" separator="),(">
-            #{ifeed}, #{item}
-        </foreach>
-    </insert>
-
     <select id="selFeedAll">
         SELECT A.ifeed, A.contents, A.location, B.iuser AS writerIuser
         , B.nm AS writerNm, A.created_at AS createdAt, B.pic AS writerPic
