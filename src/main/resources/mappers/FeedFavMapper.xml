@@ -12,4 +12,8 @@
         SET ifeed = #{ifeed}
         , iuser = #{iuser}
     </insert>
+    <delete id="delFeedFavForFeed">
+        DELETE FROM t_feed_fav
+        WHERE ifeed = #{ifeed}
+    </delete>
 </mapper>

@@ -29,6 +29,15 @@
         LIMIT #{startIdx}, #{rowCount}
     </select>
 
-
-
+    <select id="selFeedMine">
+        SELECT ifeed
+        FROM t_feed
+        WHERE ifeed = #{ifeed}
+        AND iuser = #{iuser}
+    </select>
+    <delete id="delFeed">
+        DELETE FROM t_feed
+        WHERE ifeed = #{ifeed}
+        AND iuser = #{iuser}
+    </delete>
 </mapper>

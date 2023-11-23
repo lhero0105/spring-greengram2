@@ -20,4 +20,8 @@
         SET pic = #{pic}
         WHERE iuser = #{iuser}
     </update>
+    <delete id="delFeedpicsForFeed">
+        DELETE FROM t_feed_pics
+        WHERE ifeed = #{ifeed}
+    </delete>
 </mapper>

@@ -51,6 +51,13 @@ public class FeedController {
                         .startIdx((page-1) * ROW_COUNT)
                         .build());
     }
+
+    @DeleteMapping
+    public ResVo defFeed(FeedDelDto dto){
+        log.info("dto : {}", dto);
+        return service.delFeed(dto);
+    }
+
     // insert : 1, delete : 0
     @GetMapping("/fav")
     @Operation(summary = "좋아요 처리", description = "Toggle로 처리함<br>")
@@ -65,9 +72,24 @@ public class FeedController {
         log.info("dto : {}",dto);
         return service.toggleFeedFav(dto);
     }
-    // 댓글 달리면 1 아니면 2
+    // 댓글 인서트 달리면 1 아니면 2
     @PostMapping("/comment")
     public ResVo insFeedComment(@RequestBody FeedCommentInsDto dto){
         return service.insFeedComment(dto);
+    }
+    // 피드 별 댓글 더보기
+    @GetMapping("/comment")
+    public List<FeedCommentSelVo> getComment(int ifeed){ // RequestParam이 생략되어 있습니다.
+        return service.getCommentAll(ifeed);
+    }
+
+    @DeleteMapping("/comment")
+    public ResVo delComment(@RequestParam ("ifeed_comment") int ifeedComment
+    , @RequestParam("logined_iuser") int loginedIuser){
+        log.info("ifeed_comment: {}, logined_iuser: {}", ifeedComment, loginedIuser);
+        return service.delComment(FeedCommentDelDto.builder()
+                        .ifeedComment(ifeedComment)
+                        .loginedIuser(loginedIuser)
+                        .build());
     }
 }
